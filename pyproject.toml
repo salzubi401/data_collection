@@ -1,0 +1,19 @@
+[project]
+name = "data_collection"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "salzubi401", email = "salaheddin@sentient.xyz"},
+]
+dependencies = ["torch>=2.6.0", "pandas>=2.2.3", "datasets>=3.3.1", "transformers>=4.49.0"]
+requires-python = ">=3.10"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
