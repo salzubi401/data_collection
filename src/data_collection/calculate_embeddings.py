@@ -1,5 +1,5 @@
 # Import necessary libraries
-from transformers import AutoTokenizer, AutoModelForMaskedLM
+from sentence_transformers import SentenceTransformer
 import torch
 import pickle
 import os
@@ -18,7 +18,7 @@ def parse_args():
                         help='Path to the input CSV file')
     parser.add_argument('--output_dir',
                         type=str,
-                        default="/mnt/dobby-resources/arena_logs/query_embeddings_en",
+                        default="/ephemeral/query_embeddings_en_sentence_transformer",
                         help='Directory to save embeddings')
     parser.add_argument('--batch_size',
                         type=int,
@@ -34,9 +34,8 @@ batch_size = args.batch_size
 
 data = pd.read_csv(data_path)
 
-# Load the model and tokenizer
-tokenizer = AutoTokenizer.from_pretrained("answerdotai/ModernBERT-large")
-model = AutoModelForMaskedLM.from_pretrained("answerdotai/ModernBERT-large")
+# Load the model
+model = SentenceTransformer("Alibaba-NLP/gte-Qwen2-1.5B-instruct", trust_remote_code=True)
 
 # Move model to GPU if available
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -56,25 +55,14 @@ if existing_files:
 
 # Function to get embeddings for a batch of texts
 def get_batch_embeddings(texts):
-    # Tokenize
-    inputs = tokenizer(texts, return_tensors="pt", padding=True, truncation=True, max_length=512)
-    inputs = {k: v.to(device) for k, v in inputs.items()}
-    
     # Get embeddings
     with torch.no_grad():
-        outputs = model(**inputs, output_hidden_states=True)
-        # Get the last hidden state
-        last_hidden_state = outputs.hidden_states[-1]
-        # Mean pooling
-        embeddings = torch.mean(last_hidden_state, dim=1)
-        # Move to CPU and convert to numpy
-        embeddings_cpu = embeddings.cpu().numpy()
+        embeddings = model.encode(texts)
     
     # Clear CUDA cache
-    del inputs, outputs, last_hidden_state, embeddings
     torch.cuda.empty_cache()
     
-    return embeddings_cpu
+    return embeddings
 
 def save_embedding(args):
     idx, embedding, output_dir = args
