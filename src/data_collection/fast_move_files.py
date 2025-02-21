@@ -40,6 +40,6 @@ def fast_copy_files(src_dir: str, dst_dir: str, max_workers: int = 4):
 
 # Example usage
 if __name__ == "__main__":
-    source_directory = "/ephemeral/dobby_arena_english_logs/"
-    destination_directory = "/mnt/dobby-resources/arena_logs/english_logs_raw/"
+    source_directory = "/ephemeral/query_embeddings_en_sentence_transformer/"
+    destination_directory = "/mnt/dobby-resources/arena_logs/query_embeddings_en_sentence_transformer/"
     fast_copy_files(source_directory, destination_directory, max_workers=4)
