@@ -5,7 +5,7 @@ description = "Default template for PDM package"
 authors = [
     {name = "salzubi401", email = "salaheddin@sentient.xyz"},
 ]
-dependencies = ["torch>=2.6.0", "pandas>=2.2.3", "datasets>=3.3.1", "transformers>=4.49.0"]
+dependencies = ["torch>=2.6.0", "pandas>=2.2.3", "datasets>=3.3.1", "transformers>=4.49.0", "fireworks>=2.0.4", "openai>=1.63.2", "huggingface-hub>=0.29.1", "ipykernel>=6.29.5", "fasttext @ git+https://github.com/thomas-ferraz/fastText.git", "ipdb>=0.13.13", "tqdm>=4.67.1"]
 requires-python = ">=3.10"
 readme = "README.md"
 license = {text = "MIT"}
