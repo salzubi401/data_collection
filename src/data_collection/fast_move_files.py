@@ -2,6 +2,7 @@ import shutil
 from pathlib import Path
 import concurrent.futures
 import time
+import argparse
 
 def copy_file(src_file: Path, dst_dir: Path):
     """Copy a single file if it doesn't exist in destination."""
@@ -40,6 +41,12 @@ def fast_copy_files(src_dir: str, dst_dir: str, max_workers: int = 4):
 
 # Example usage
 if __name__ == "__main__":
-    source_directory = "/ephemeral/query_embeddings_en_sentence_transformer/"
-    destination_directory = "/mnt/dobby-resources/arena_logs/query_embeddings_en_sentence_transformer/"
-    fast_copy_files(source_directory, destination_directory, max_workers=4)
+    parser = argparse.ArgumentParser(description='Fast parallel file copy utility')
+    parser.add_argument('source', help='Source directory path')
+    parser.add_argument('destination', help='Destination directory path')
+    parser.add_argument('--workers', type=int, default=4, 
+                       help='Number of worker threads (default: 4)')
+    
+    args = parser.parse_args()
+    
+    fast_copy_files(args.source, args.destination, max_workers=args.workers)
